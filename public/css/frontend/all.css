@@ -15,6 +15,12 @@
 a {
     color: mediumpurple;
 }
+.glyphicon-tag:hover {
+    color: mediumpurple;
+}
+.glyphicon-remove:hover {
+    color: red;
+}
 
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
