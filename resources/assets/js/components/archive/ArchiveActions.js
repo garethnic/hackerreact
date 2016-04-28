@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
-import { Router, Route, IndexRoute, Link, hashHistory, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router';
 
 var buttonStyle = {
     cursor: 'pointer'
@@ -10,7 +10,8 @@ const ArchiveActions = React.createClass({
     getInitialState: function () {
         "use strict";
         return {
-            archive: []
+            archive: [],
+            refresh: false
         };
     },
     componentWillReceiveProps: function (archive) {

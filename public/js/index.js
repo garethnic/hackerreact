@@ -34482,10 +34482,6 @@ var _jquery = require('jquery');
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _ArchiveActions = require('./ArchiveActions');
-
-var _ArchiveActions2 = _interopRequireDefault(_ArchiveActions);
-
 var _getDomain = require('../functions/getDomain');
 
 var _getDomain2 = _interopRequireDefault(_getDomain);
@@ -34493,6 +34489,12 @@ var _getDomain2 = _interopRequireDefault(_getDomain);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var storiesURL = '/stories';
+//import ArchiveActions from './ArchiveActions'
+
+
+var buttonStyle = {
+    cursor: 'pointer'
+};
 
 var Archive = _react2.default.createClass({
     displayName: 'Archive',
@@ -34512,6 +34514,28 @@ var Archive = _react2.default.createClass({
                 stories: data
             });
         }.bind(this));
+    },
+    handleClick: function handleClick(story, e) {
+        "use strict";
+
+        e.preventDefault();
+        _jquery2.default.ajax({
+            type: "POST",
+            url: '/remove',
+            data: story,
+            headers: {
+                'X-CSRF-TOKEN': (0, _jquery2.default)('meta[name="csrf_token"]').attr('content')
+            },
+            dataType: 'json'
+        });
+
+        var stories = this.state.stories.filter(function (stry) {
+            return story.id !== stry.id;
+        });
+
+        this.setState({
+            stories: stories
+        });
     },
     render: function render() {
         "use strict";
@@ -34553,81 +34577,19 @@ var Archive = _react2.default.createClass({
                         ),
                         _react2.default.createElement(
                             'span',
-                            { className: 'pull-right' },
-                            _react2.default.createElement(_ArchiveActions2.default, { archive: story })
+                            { className: 'pull-right', onClick: this.handleClick.bind(this, story) },
+                            _react2.default.createElement('i', { className: 'glyphicon glyphicon-remove', style: buttonStyle })
                         )
                     )
                 );
-            })
+            }.bind(this))
         );
     }
 });
 
 exports.default = Archive;
 
-},{"../functions/getDomain":229,"./ArchiveActions":228,"jquery":47,"react":223}],228:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
-
-var _jquery = require('jquery');
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _reactRouter = require('react-router');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var buttonStyle = {
-    cursor: 'pointer'
-};
-
-var ArchiveActions = _react2.default.createClass({
-    displayName: 'ArchiveActions',
-
-    getInitialState: function getInitialState() {
-        "use strict";
-
-        return {
-            archive: []
-        };
-    },
-    componentWillReceiveProps: function componentWillReceiveProps(archive) {
-        "use strict";
-
-        this.setState({
-            archive: archive
-        });
-    },
-    handleClick: function handleClick(e) {
-        "use strict";
-
-        _jquery2.default.ajax({
-            type: "POST",
-            url: '/remove',
-            data: this.props.archive,
-            headers: {
-                'X-CSRF-TOKEN': (0, _jquery2.default)('meta[name="csrf_token"]').attr('content')
-            },
-            dataType: 'json'
-        });
-    },
-    render: function render() {
-        "use strict";
-
-        return _react2.default.createElement('i', { className: 'glyphicon glyphicon-remove', style: buttonStyle, onClick: this.handleClick });
-    }
-});
-
-exports.default = ArchiveActions;
-
-},{"jquery":47,"react":223,"react-router":81}],229:[function(require,module,exports){
+},{"../functions/getDomain":228,"jquery":47,"react":223}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34643,7 +34605,7 @@ function getDomain(storyURL) {
 
 exports.default = getDomain;
 
-},{}],230:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -34681,7 +34643,7 @@ _reactDom2.default.render(_react2.default.createElement(
     )
 ), document.getElementById('app-container'));
 
-},{"./App":226,"./archive/Archive":227,"./stories/GetStories":231,"react":223,"react-dom":51,"react-router":81}],231:[function(require,module,exports){
+},{"./App":226,"./archive/Archive":227,"./stories/GetStories":230,"react":223,"react-dom":51,"react-router":81}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34737,7 +34699,7 @@ var GetStories = _react2.default.createClass({
 
 exports.default = GetStories;
 
-},{"./StoryList":233,"jquery":47,"react":223}],232:[function(require,module,exports){
+},{"./StoryList":232,"jquery":47,"react":223}],231:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34797,7 +34759,7 @@ var StoryActions = _react2.default.createClass({
 
 exports.default = StoryActions;
 
-},{"jquery":47,"react":223}],233:[function(require,module,exports){
+},{"jquery":47,"react":223}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34898,6 +34860,6 @@ var StoryList = _react2.default.createClass({
 
 exports.default = StoryList;
 
-},{"../functions/getDomain":229,"./StoryActions":232,"jquery":47,"react":223}]},{},[230]);
+},{"../functions/getDomain":228,"./StoryActions":231,"jquery":47,"react":223}]},{},[229]);
 
 //# sourceMappingURL=index.js.map

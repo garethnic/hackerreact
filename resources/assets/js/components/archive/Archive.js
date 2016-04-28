@@ -1,9 +1,13 @@
 import React from 'react';
 import $ from 'jquery';
-import ArchiveActions from './ArchiveActions'
+//import ArchiveActions from './ArchiveActions'
 import getDomain from '../functions/getDomain';
 
 const storiesURL = '/stories';
+
+var buttonStyle = {
+    cursor: 'pointer'
+}
 
 const Archive = React.createClass({
     getInitialState: function () {
@@ -14,12 +18,32 @@ const Archive = React.createClass({
     },
     componentDidMount: function () {
         "use strict";
-
         this.serverRequest = $.getJSON(storiesURL, function (data) {
             this.setState({
                 stories: data
             });
         }.bind(this));
+    },
+    handleClick: function (story, e) {
+        "use strict";
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: '/remove',
+            data: story,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+            },
+            dataType: 'json'
+        });
+
+        var stories = this.state.stories.filter(function (stry) {
+            return story.id !== stry.id;
+        });
+
+        this.setState({
+            stories: stories
+        });
     },
     render: function () {
         "use strict";
@@ -34,11 +58,12 @@ const Archive = React.createClass({
                             <a href={story.url}>{story.title}</a>&nbsp;<small>({domainOfStory})</small>
                             <div>
                                 <small>{story.score} points by {story.by} {whenPosted}</small>
-                                <span className="pull-right"><ArchiveActions archive={story}/></span>
+                                <span className="pull-right" onClick={this.handleClick.bind(this, story)}>
+                                    <i className="glyphicon glyphicon-remove" style={buttonStyle}></i></span>
                             </div>
                         </div>
                     );
-                })}
+                }.bind(this))}
             </div>
         );
     }
